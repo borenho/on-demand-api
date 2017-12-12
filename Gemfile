@@ -14,6 +14,8 @@ gem 'sqlite3'
 gem 'puma', '~> 3.7'
 # Use omniauth for multiple social login providers
 gem 'omniauth', '~> 1.3', '>= 1.3.1'
+# To configure google-oauth2
+gem 'omniauth-google-oauth2'
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 # gem 'jbuilder', '~> 2.5'
 # Use Redis adapter to run Action Cable in production
