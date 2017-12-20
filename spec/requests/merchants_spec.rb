@@ -23,7 +23,7 @@ RSpec.describe 'Merchants API', type: :request do
 
     # GET /merchants/:id
     describe 'GET /merchants/:id' do
-        before { get '/merchants/#{merchant_id}' }
+        before { get "/merchants/#{merchant_id}" }
 
         context 'when the record exists' do
             it 'returns the merchant' do
@@ -84,7 +84,7 @@ RSpec.describe 'Merchants API', type: :request do
         let(:valid_attributes) { { name: 'Kas Persky' } }
 
         context 'when the record exists' do
-            before { put '/merchants/#{merchant_id}', params: valid_attributes }
+            before { put "/merchants/#{merchant_id}", params: valid_attributes }
 
             it 'updates the record' do
                 expect(response.body).to be_empty
@@ -98,7 +98,7 @@ RSpec.describe 'Merchants API', type: :request do
 
     # DELETE /merchants/:id
     describe 'DELETE /merchants/:id' do
-        before { delete '/merchants/#{merchant_id}' }
+        before { delete "/merchants/#{merchant_id}" }
 
         it 'returns statis code 204' do
             expect(response).to have_http_status(204)

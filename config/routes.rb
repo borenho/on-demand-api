@@ -3,4 +3,9 @@ Rails.application.routes.draw do
   get 'sessions_controller/create'
 
   get '/auth/:provider/callback', to: 'sessions#create'
+
+  # Enforce the 1:m association at the routing level by nesting
+  resources :merchants do
+    resources :products
+  end
 end
