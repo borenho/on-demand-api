@@ -12,7 +12,7 @@ RSpec.describe 'Merchants API', type: :request do
 
         it 'returns merchants' do
             # Note that `json` is a custom helper to parse JSON responses
-            expect(json).not_to_be_empty
+            expect(json).not_to be_empty
             expect(json.size).to eq(10)
         end
 
@@ -27,7 +27,7 @@ RSpec.describe 'Merchants API', type: :request do
 
         context 'when the record exists' do
             it 'returns the merchant' do
-                expect(json).not_to_be_empty
+                expect(json).not_to be_empty
                 expect(json['id']).to eq(merchant_id)
             end
 
@@ -40,7 +40,7 @@ RSpec.describe 'Merchants API', type: :request do
             let(:merchant_id) { 100 }
 
             it 'returns a not found message' do
-                expect(response.body).to match(/We searched everywhere for this merchant but we couldn't find him or her!/)
+                expect(response.body).to match(/Couldn't find Merchant/)
             end
 
             it 'returns status code 404' do
@@ -67,7 +67,7 @@ RSpec.describe 'Merchants API', type: :request do
         end
 
         context 'when the request is invalid' do
-            before { post '/merchants', params: { name: 'Kaspersky Stores'} }
+            before { post '/merchants', params: { name: 'Kasp Ersky'} }
 
             it 'returns a validation error message' do
                 expect(response.body).to match(/Validation failed: Created by can't be blank/)
