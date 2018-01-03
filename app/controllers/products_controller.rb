@@ -45,3 +45,7 @@ class ProductsController < ApplicationController
         @product = @merchant.products.find_by!(id: params[:id]) if @merchant
     end
 end
+
+# TODOs
+# Return a custom success message after product creation/update/deletion
+# Return the updated record after a PUT request

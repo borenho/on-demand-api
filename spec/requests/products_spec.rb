@@ -132,3 +132,7 @@ RSpec.describe 'Products API' do
         end
     end
 end
+
+# TODOs
+# Return a custom success message after product creation/update/deletion
+# Return the updated record after a PUT request
