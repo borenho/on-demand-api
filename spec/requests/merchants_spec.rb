@@ -61,6 +61,14 @@ RSpec.describe 'Merchants API', type: :request do
                 expect(json['name']).to eq('Kaspersky Stores')
             end
 
+            it 'returns the created merchant' do
+                expect(json). not_to be_empty
+            end
+
+            it 'returns a merchant created successfully message' do
+                expect(response.message).to match('Created')
+            end
+
             it 'returns status code 201' do
                 expect(response).to have_http_status(201)
             end
@@ -105,3 +113,7 @@ RSpec.describe 'Merchants API', type: :request do
         end
     end
 end
+
+# TODOs
+# Return a custom success message after merchant creation/update/deletion
+# Return the updated record after a PUT request

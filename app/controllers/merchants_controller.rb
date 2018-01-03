@@ -43,3 +43,7 @@ class MerchantsController < ApplicationController
         @merchant = Merchant.find(params[:id])
     end
 end
+
+# TODOs
+# Return a custom success message after merchant creation/update/deletion
+# Return the updated record after a PUT request
