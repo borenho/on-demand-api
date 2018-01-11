@@ -16,23 +16,21 @@ gem 'puma', '~> 3.7'
 gem 'omniauth', '~> 1.3', '>= 1.3.1'
 # To configure google-oauth2
 gem 'omniauth-google-oauth2'
-# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-# gem 'jbuilder', '~> 2.5'
-# Use Redis adapter to run Action Cable in production
-# gem 'redis', '~> 3.0'
+# Automatically hide API keys in an application.yml
+gem 'figaro'
 # Use ActiveModel has_secure_password
-# gem 'bcrypt', '~> 3.1.7'
+gem 'bcrypt', '~> 3.1.7'
+# Use json web tokens to hash entered passwords
+gem 'jwt'
+# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
+gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
 
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
-# gem 'rack-cors'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
 end
+
 
 group :development do
   gem 'rspec-rails'
@@ -42,6 +40,7 @@ group :development do
   gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
+
 group :test do
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
@@ -49,5 +48,13 @@ group :test do
   gem 'database_cleaner'
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+# Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+# gem 'jbuilder', '~> 2.5'
+# Use Redis adapter to run Action Cable in production
+# gem 'redis', '~> 3.0'
+
+# Use Capistrano for deployment
+# gem 'capistrano-rails', group: :development
+
+# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+# gem 'rack-cors'

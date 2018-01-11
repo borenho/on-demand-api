@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171220205218) do
+ActiveRecord::Schema.define(version: 20180111120658) do
 
   create_table "merchants", force: :cascade do |t|
     t.string "name"
@@ -33,6 +33,12 @@ ActiveRecord::Schema.define(version: 20171220205218) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "provider"
+    t.string "uid"
+    t.string "access_token"
+    t.string "refresh_access_token"
+    t.datetime "access_token_expires_at"
+    t.string "password_digest"
   end
 
 end
