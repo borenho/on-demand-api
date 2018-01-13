@@ -68,8 +68,9 @@ RSpec.configure do |config|
 
   # Use Factory Girl
   config.include FactoryGirl::Syntax::Methods
-  # Include the spec helper as a shared module for all request specs
-  config.include RequestSpecHelper, type: :request
+  # Include the spec helper as a shared module for all types, not just requests, so we use the json helper
+  config.include RequestSpecHelper
+  config.include ControllerSpecHelper
 
   # start by truncating all the tables but then use the faster transaction strategy the rest of the time.
   config.before(:suite) do
