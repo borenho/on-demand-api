@@ -3,13 +3,15 @@ class MerchantsController < ApplicationController
 
     # GET /merchants
     def index
-        @merchants = Merchant.all
+        # Get merchant accounts created by the current user
+        @merchants = current_user.merchants
         json_response(@merchants)
     end
 
     # POST /merchants
     def create
-        @merchant = Merchant.create!(merchant_params)
+        # Create merchant accounts belonging to the current user
+        @merchant = current_user.merchants.create!(merchant_params)
         json_response(@merchant, :created)
     end
 
@@ -35,7 +37,7 @@ class MerchantsController < ApplicationController
 
     def merchant_params
         # Whitelist params
-        params.permit(:name, :created_by)
+        params.permit(:name)
     end
 
     def set_merchant
