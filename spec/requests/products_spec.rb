@@ -2,14 +2,16 @@ require 'rails_helper'
 
 RSpec.describe 'Products API' do
     # Initialize test data
-    let!(:merchant) { create(:merchant) }
+    let(:user) { create(:user) }
+    let!(:merchant) { create(:merchant, created_by: user.id) }
     let!(:products) { create_list(:product, 20, merchant_id: merchant.id) }
-    let(:merchant_id) { merchant.id }
+    let!(:merchant_id) { merchant.id }
     let(:product_id) { products.first.id }
+    let(:headers) { valid_headers }
 
     # GET /merchants/:merchant_id/products
     describe 'GET /merchants/:merchant_id/products' do
-        before { get "/merchants/#{merchant_id}/products" }
+        before { get "/merchants/#{merchant_id}/products", params: {}, headers: headers }
 
         context 'when merchant exists' do
             it 'returns status code 200' do
@@ -22,13 +24,13 @@ RSpec.describe 'Products API' do
         end
 
         context 'when merchant does not exist' do
-            let(:merchant_id) { 0 }
+            let!(:merchant_id) { 0 }
 
             it 'return status code 404' do
                 expect(response).to have_http_status(404)
             end
 
-            it "returns a not found error message" do
+            it 'returns a not found error message' do
                 expect(response.body).to match(/Couldn't find Merchant/)
             end
         end
@@ -36,7 +38,7 @@ RSpec.describe 'Products API' do
 
     # GET /merchants/:merchant_id/products/:product_id
     describe 'GET /merchants/:merchant_id/products/product_id' do
-        before { get "/merchants/#{merchant_id}/products/#{product_id}" }
+        before { get "/merchants/#{merchant_id}/products/#{product_id}", params: {}, headers: headers }
 
         context 'when product exists' do
             it 'return status code 200' do
@@ -63,24 +65,22 @@ RSpec.describe 'Products API' do
 
     # POST /merchants/:merchant_id/products
     describe 'POST /merchants/:merchant_id/products' do
-        let(:valid_attributes) { { name: '3 Bedroom', price: 20000 } }
+        let(:valid_attributes) { { name: '3 Bedroom', price: 20_000 }.to_json }
 
         context 'when request attributes are valid' do
-            before { post "/merchants/#{merchant_id}/products", params: valid_attributes }
+            before { post "/merchants/#{merchant_id}/products", params: valid_attributes, headers: headers }
 
-            it 'return status code 201' do
+            it 'returns status code 201' do
                 expect(response).to have_http_status(201)
             end
 
             it "returns the created product" do
-                get "/merchants/#{merchant_id}/products/#{product_id}"
-
-                expect(json['id']).to eq(product_id)
+                expect(json).not_to be_empty
             end
         end
 
         context 'when the request is invalid' do
-            before { post "/merchants/#{merchant_id}/products", params: {} }
+            before { post "/merchants/#{merchant_id}/products", params: {}, headers: headers }
 
             it 'return status code 422' do
                 expect(response).to have_http_status(422)
@@ -94,9 +94,9 @@ RSpec.describe 'Products API' do
 
     # PUT /merchants/:merchant_id/products/:product_id
     describe 'PUT /merchants/:merchant_id/products/:product_id' do
-        let(:valid_attributes) { { name: 'Air Bnb', price: 50000 } }
+        let(:valid_attributes) { { name: 'Air Bnb', price: 50_000 }.to_json }
 
-        before { put "/merchants/#{merchant_id}/products/#{product_id}", params: valid_attributes }
+        before { put "/merchants/#{merchant_id}/products/#{product_id}", params: valid_attributes, headers: headers }
 
         context 'when item exists' do
 
@@ -125,7 +125,7 @@ RSpec.describe 'Products API' do
 
     # DELETE /merchants/:merchant_id/products/:product_id
     describe 'DELETE /merchants/:merchant_id/products/:product_id' do
-        before { delete "/merchants/#{merchant_id}/products/#{product_id}" }
+        before { delete "/merchants/#{merchant_id}/products/#{product_id}", params: {}, headers: headers }
 
         it 'returns a status code 204' do
             expect(response).to have_http_status(204)

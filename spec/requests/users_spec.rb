@@ -2,18 +2,19 @@ require 'rails_helper'
 
 RSpec.describe 'Users API', type: :request do
     let(:user) { build(:user) }
+    # We don't need a token to hit auth/signup, so remove Authorization part
     let(:headers) { valid_headers.except('Authorization') }
     let(:valid_attributes) do
-        attributes_for(:user, password_confirmation: user.password)
+        attributes_for(:user, password_confirmation: user.password).to_json
     end
 
     # User signup test suite
     describe 'POST /auth/signup' do
         context 'when valid request' do
-            before { post '/auth/signup', params: valid_attributes.to_json, headers: headers }
+            before { post '/auth/signup', params: valid_attributes, headers: headers }
 
             it 'creates a new user' do
-                expect(response).to have_https_status(201)
+                expect(response).to have_http_status(201)
             end
 
             it 'returns success message' do
@@ -21,7 +22,7 @@ RSpec.describe 'Users API', type: :request do
             end
 
             it 'returns an authentication token' do
-                expect(json['auth_token']).no_to be_nil
+                expect(json['auth_token']).not_to be_nil
             end
         end
 
@@ -29,7 +30,7 @@ RSpec.describe 'Users API', type: :request do
             before { post '/auth/signup', params: {}, headers: headers }
 
             it 'does not create a new user' do
-                expect(response).to have_https_status(422)
+                expect(response).to have_http_status(422)
             end
 
             it 'returns failure message' do

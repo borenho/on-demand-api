@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', to: 'sessions#create'
 
   post '/auth/login', to: 'authentication#authenticate'
-  post '/auth/signup', to 'users#create'
+  post '/auth/signup', to: 'users#create'
 
   # Enforce the 1:m association at the routing level by nesting
   resources :merchants do

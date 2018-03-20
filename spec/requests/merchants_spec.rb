@@ -1,14 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe 'Merchants API', type: :request do
+    # Add merchant account creator
+    let(:user) { create(:user) }
     # Initialize test data
-    let!(:merchants) { create_list(:merchant, 10) }
+    let!(:merchants) { create_list(:merchant, 10, created_by: user.id) }
     let(:merchant_id) { merchants.first.id }
+    # Authorize request
+    let(:headers) { valid_headers }
 
     # Test suite for GET /merchants
     describe 'GET /merchants' do
-        # Make an HTTP get request before each example
-        before { get '/merchants' }
+        # Make an HTTP get request before each example, with headers
+        before { get '/merchants', params: {}, headers: headers }
 
         it 'returns merchants' do
             # Note that `json` is a custom helper to parse JSON responses
@@ -23,7 +27,7 @@ RSpec.describe 'Merchants API', type: :request do
 
     # GET /merchants/:id
     describe 'GET /merchants/:id' do
-        before { get "/merchants/#{merchant_id}" }
+        before { get "/merchants/#{merchant_id}", params: {}, headers: headers }
 
         context 'when the record exists' do
             it 'returns the merchant' do
@@ -51,18 +55,20 @@ RSpec.describe 'Merchants API', type: :request do
 
     # POST /merchants
     describe 'POST /merchants' do
-        # Send with it a valid payload
-        let(:valid_attributes) { { name: 'Kaspersky Stores', created_by: '1' } }
+        let(:valid_attributes) do
+            # Send with it json payload
+            { name: 'Kaspersky Stores', created_by: user.id.to_s }.to_json
+        end
 
         context 'when the request is valid' do
-            before { post '/merchants', params: valid_attributes }
+            before { post '/merchants', params: valid_attributes, headers: headers }
 
             it 'creates a merchant' do
                 expect(json['name']).to eq('Kaspersky Stores')
             end
 
             it 'returns the created merchant' do
-                expect(json). not_to be_empty
+                expect(json).not_to be_empty
             end
 
             it 'returns a merchant created successfully message' do
@@ -75,10 +81,12 @@ RSpec.describe 'Merchants API', type: :request do
         end
 
         context 'when the request is invalid' do
-            before { post '/merchants', params: { name: 'Kasp Ersky'} }
+            let(:invalid_attributes) {{ name: nil }.to_json }
+
+            before { post '/merchants', params: invalid_attributes, headers: headers }
 
             it 'returns a validation error message' do
-                expect(response.body).to match(/Validation failed: Created by can't be blank/)
+                expect(response.body).to match(/Validation failed: Name can't be blank/)
             end
 
             it 'returns status code 422' do
@@ -89,10 +97,10 @@ RSpec.describe 'Merchants API', type: :request do
 
     # PUT /merchants/:id
     describe 'PUT /merchants/:id' do
-        let(:valid_attributes) { { name: 'Kas Persky' } }
+        let(:valid_attributes) { { name: 'Kas Persky' }.to_json }
 
         context 'when the record exists' do
-            before { put "/merchants/#{merchant_id}", params: valid_attributes }
+            before { put "/merchants/#{merchant_id}", params: valid_attributes, headers: headers }
 
             it 'updates the record' do
                 expect(response.body).to be_empty
@@ -106,7 +114,7 @@ RSpec.describe 'Merchants API', type: :request do
 
     # DELETE /merchants/:id
     describe 'DELETE /merchants/:id' do
-        before { delete "/merchants/#{merchant_id}" }
+        before { delete "/merchants/#{merchant_id}", params: {}, headers: headers }
 
         it 'returns statis code 204' do
             expect(response).to have_http_status(204)
